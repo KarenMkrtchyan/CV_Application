@@ -1,10 +1,20 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
+
+import DownCaretIcon from './icons/DownCaretIcon.svg?react'
+import UpCaretIcon from './icons/UpCaretIcon.svg?react'
+
 import './App.css'
+
+function DropDown(props) {
+	return <div>{props.icon}</div>
+}
 
 function GeneralInfo({ generalInfo, updateGeneral }) {
 	const [name, updateName] = useState('')
 	const [email, updateEmail] = useState('')
-	const [number, updatenumber] = useState(0)
+	const [number, updatenumber] = useState()
+	const [open, updateOpen] = useState(false)
 
 	function onSubmit(event) {
 		event.preventDefault()
@@ -13,49 +23,70 @@ function GeneralInfo({ generalInfo, updateGeneral }) {
 		updateGeneral(updatedInfo)
 	}
 
-	return (
-		<>
-			<h2>General Informaion</h2>
-			<form id="generalInfo">
-				<div>
-					<label htmlFor="name">Full Name</label>
-					<input
-						value={name}
-						onChange={e => updateName(e.target.value)}
-						name="name"
-						type="text"
-					></input>
+	if (open)
+		return (
+			<>
+				<div className="closedForm">
+					<h2>General Informaion</h2>
+					<div className="moveMeDownABit" onClick={() => updateOpen(!open)}>
+						<DropDown icon={<UpCaretIcon />} />
+					</div>
 				</div>
+				<CSSTransition in={open} timeout={400} classNames={'menu-primary'}>
+					<div className="menu">
+						<form id="generalInfo">
+							<div>
+								<label htmlFor="name">Full Name</label>
+								<input
+									value={name}
+									onChange={e => updateName(e.target.value)}
+									name="name"
+									type="text"
+								></input>
+							</div>
 
-				<div>
-					<label htmlFor="email">Email</label>
-					<input
-						value={email}
-						onChange={e => updateEmail(e.target.value)}
-						name="email"
-						type="email"
-					></input>
-				</div>
+							<div>
+								<label htmlFor="email">Email</label>
+								<input
+									value={email}
+									onChange={e => updateEmail(e.target.value)}
+									name="email"
+									type="email"
+								></input>
+							</div>
 
-				<div>
-					<label htmlFor="phoneNumber">Phone Number</label>
-					<input
-						value={number}
-						onChange={e => updatenumber(e.target.value)}
-						name="phoneNumber"
-						type="tel"
-					></input>
-				</div>
+							<div>
+								<label htmlFor="phoneNumber">Phone Number</label>
+								<input
+									value={number}
+									onChange={e => updatenumber(e.target.value)}
+									name="phoneNumber"
+									type="tel"
+								></input>
+							</div>
 
-				<div className="subEditButton">
-					<button type="submit" onClick={event => onSubmit(event)}>
-						Submit
-					</button>
-					<button>Edit</button>
+							<div className="subEditButton">
+								<button type="submit" onClick={event => onSubmit(event)}>
+									Submit
+								</button>
+								<button>Edit</button>
+							</div>
+						</form>
+					</div>
+				</CSSTransition>
+			</>
+		)
+	else
+		return (
+			<>
+				<div className="closedForm">
+					<h2>General Informaion</h2>
+					<div className="moveMeDownABit" onClick={() => updateOpen(!open)}>
+						<DropDown icon={<DownCaretIcon />} />
+					</div>
 				</div>
-			</form>
-		</>
-	)
+			</>
+		)
 }
 function EducationalExperience({ eduList, updateEduList }) {
 	const [name, updateName] = useState('')
@@ -221,9 +252,14 @@ function App() {
 
 	return (
 		<>
-			<GeneralInfo generalInfo={generalInfo} updateGeneral={updateGeneral} />
-			<EducationalExperience eduList={eduList} updateEduList={updateEduList} />
-			<PracticalExperience expList={expList} updateExpList={updateExpList} />
+			<div className="overallForm">
+				<GeneralInfo generalInfo={generalInfo} updateGeneral={updateGeneral} />
+				<EducationalExperience
+					eduList={eduList}
+					updateEduList={updateEduList}
+				/>
+				<PracticalExperience expList={expList} updateExpList={updateExpList} />
+			</div>
 			<CV generalInfo={generalInfo} eduList={eduList} expList={expList} />
 		</>
 	)

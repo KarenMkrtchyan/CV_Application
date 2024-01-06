@@ -1,6 +1,23 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: left;
+	margin: 0;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	min-width: 320px;
+	min-height: 100vh;
+}
+
+.menu-primary-enter {
+	position: relative;
+	transform: translateX(-110%);
+}
+.menu-primary-enter-active {
+	transform: translateX(0%);
+	transition: all 400 ease;
+}
+.menu-primary-exit {
+	position: relative;
+}
+.menu-primary-exit-active {
+	transform: translateX(-110%);
+	transition: all 400 ease;
 }
